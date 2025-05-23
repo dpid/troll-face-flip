@@ -511,6 +511,16 @@ function CGame(oData) {
             $("#canvas").trigger("share_event", s_iTotalScore);
             $("#canvas").trigger("save_score", s_iTotalScore);
             
+            // Save final session score to Open Game Protocol
+            if (_iScore > 0) {
+                ogp.savePoints(_iScore).then(() => {
+                    console.log('Final session score saved to OGP:', _iScore);
+                }).catch(error => {
+                    console.error('Error saving final score to OGP:', error);
+                    // Don't show error popup on game over to avoid disrupting the flow
+                });
+            }
+            
             playSound("game_over", 1, false);
             stopSound("soundtrack");
             setTimeout(function() { playSound("soundtrack", 0.5, false); }, 3000);

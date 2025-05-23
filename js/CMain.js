@@ -1,18 +1,43 @@
 // Initialize Open Game Protocol SDK
 const ogp = new OpenGameSDK({
     ui: {
-        gameIcon: 'sprites/icon.png' // Using the game's icon
+        gameIcon: 'sprites/200x200.png' // Using the game's icon
     }
+    // Set useCustomAuth: true if you want to use your own authentication system
+    // useCustomAuth: false  // Default is false, which uses built-in Privy auth
 });
 
 // Initialize SDK when document is ready
 $(document).ready(function() {
+    // Set up OGP event listeners
     ogp.on('OnReady', () => {
-        ogp.init({ gameId: 'troll-flip2' }).then(() => {
-            console.log('Open Game Protocol SDK initialized');
-            ogp.gameReadyToPlay();
-        });
+        console.log('OGP SDK is ready');
     });
+
+    ogp.on('LoginSuccess', () => {
+        console.log('User logged in successfully to OGP');
+    });
+
+    ogp.on('LoginError', (error) => {
+        console.error('OGP login error:', error);
+    });
+
+    ogp.on('PointsSaved', (data) => {
+        console.log('Points saved successfully:', data);
+    });
+
+    ogp.on('PointsError', (error) => {
+        console.error('Error saving points:', error);
+    });
+
+    // initialize the SDK
+    ogp.init({ gameId: 'troll-flip2' }).then(() => {
+        console.log('Open Game Protocol SDK initialized');
+    }).catch(error => {
+        console.error('Failed to initialize OGP SDK:', error);
+    });
+
+    ogp.gameReadyToPlay();
 });
 
 function CMain(oData) {
